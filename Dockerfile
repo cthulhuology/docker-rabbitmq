@@ -20,8 +20,9 @@ RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_mana
 # replace erlang cookie
 RUN uuidgen -r | sed 's%-%%g' > ~/.erlang.cookie
 
-# expose AMQP port and Management interface
+# expose AMQP port and Management interface and the epmd port
 EXPOSE 5672
 EXPOSE 15672
+EXPOSE 4369
 
-CMD /usr/sbin/rabbitmq-server
+CMD /etc/init.d/rabbitmq-server start && /bin/bash -l
