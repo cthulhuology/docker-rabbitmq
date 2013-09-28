@@ -20,6 +20,8 @@ RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_mana
 # replace erlang cookie and make sure both root and rabbitmq use it
 RUN uuidgen -r | sed 's%-%%g' > ~/.erlang.cookie
 RUN cat ~/.erlang.cookie > /var/lib/rabbitmq/.erlang.cookie
+RUN chmod 400 /var/lib/rabbitmq/.erlang.cookie
+RUN chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
 
 # install a custom rabbitmq-server that uses CONTAINER_SERVER as an env var
 RUN curl -L https://raw.github.com/cthulhuology/docker-rabbitmq/master/rabbitmq-server > /usr/lib/rabbitmq/bin/rabbitmq-server
@@ -35,5 +37,4 @@ EXPOSE 9103
 EXPOSE 9104
 EXPOSE 9105
 
-#CMD /etc/init.d/rabbitmq-server start && /bin/bash -l
-CMD /bin/bash -l
+CMD /usr/sbin/rabbitmq-server
