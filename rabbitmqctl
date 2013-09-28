@@ -1,0 +1,1 @@
+exec erl -pa "/usr/lib/rabbitmq/lib/rabbitmq_server-3.1.5/ebin" -noinput -hidden +W w +K true +A30 +P 1048576 -kernel inet_dist_listen_max 9105 -kernel inet_dist_listen_min 9100 -kernel inet_default_connect_options '[{nodelay,true}]' -name rabbitmqctl$$@${CONTAINER_SERVER} -boot "start_clean" -s rabbit_control_main -nodename rabbit@${CONTAINER_SERVER} -extra "$@"

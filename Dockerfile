@@ -26,9 +26,8 @@ RUN chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
 # install a custom rabbitmq-server that uses CONTAINER_SERVER as an env var
 RUN curl -L https://raw.github.com/cthulhuology/docker-rabbitmq/master/rabbitmq-server > /usr/lib/rabbitmq/bin/rabbitmq-server
 
-# Update rabbitmqctl and rabbitmq-plugins to work too
-RUN sed -i '34c -name rabbitmqctl$$@${CONTAINER_SERVER} \\' /usr/lib/rabbitmq/bin/rabbitmqctl
-RUN sed -i '33c -name rabbitmq-plugins$$@${CONTAINER_SERVER} \\' /usr/lib/rabbitmq/bin/rabbitmq-plugins
+# Update rabbitmqctl
+RUN curl -L https://raw.github.com/cthulhuology/docker-rabbitmq/master/rabbitmqctl > /usr/lib/rabbitmq/bin/rabbitmqctl
 
 # expose AMQP port and Management interface and the epmd port, and the inet_dist_listen_min through inet_dist_listen_max ranges
 EXPOSE 5672
