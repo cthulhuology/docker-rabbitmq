@@ -37,4 +37,5 @@ EXPOSE 9103
 EXPOSE 9104
 EXPOSE 9105
 
-CMD /usr/sbin/rabbitmq-server
+# create a shell so we can configure clustering and stuff
+CMD /usr/sbin/rabbitmq-server && /bin/bash -l
