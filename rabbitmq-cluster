@@ -1,0 +1,20 @@
+#!/bin/bash
+
+CONFIG=$(dig @${DNSSERVER} TXT ${CONTAINER_SERVER} | grep "^${CONTAINER_SERVER}\." | awk '{ print $5}')
+CLUSTER=$(echo $CONFIG | gawk -F ";" 'match($0,/rabbitmq_cluster=(\S+)/,m) {print m[1]}' | sed 's%\\;%%g' | sed 's%"%%g')
+
+echo "Starting RabbitMQ"
+/usr/lib/rabbitmq/bin/rabbitmq-server &
+
+sleep 10
+
+if [[ -z "$CLUSTER" ]]; then
+	echo "Running as master"
+else
+	echo "Joining cluster at $CLUSTER"
+	rabbitmqctl stop_app
+	rabbitmqctl reset
+	rabbitmqctl join_cluster $CLUSTER
+	rabbitmqctl start_app
+fi
+
