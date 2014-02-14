@@ -24,10 +24,13 @@ RUN chmod 400 /var/lib/rabbitmq/.erlang.cookie
 RUN chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
 
 # install a custom rabbitmq-server that uses CONTAINER_SERVER as an env var
-RUN curl -L https://raw.github.com/cthulhuology/docker-rabbitmq/master/rabbitmq-server > /usr/lib/rabbitmq/bin/rabbitmq-server
+ADD ./rabbitmq-server /usr/lib/rabbitmq/bin/rabbitmq-server
 
 # Update rabbitmqctl
-RUN curl -L https://raw.github.com/cthulhuology/docker-rabbitmq/master/rabbitmqctl > /usr/lib/rabbitmq/bin/rabbitmqctl
+ADD ./rabbitmqclt /usr/lib/rabbitmq/bin/rabbitmqctl
+
+# install a script to setup the cluster based on DNS
+ADD ./rabbitmq-cluster /usr/sbin/rabbitmq-cluster
 
 # expose AMQP port and Management interface and the epmd port, and the inet_dist_listen_min through inet_dist_listen_max ranges
 EXPOSE 5672
@@ -41,4 +44,4 @@ EXPOSE 9104
 EXPOSE 9105
 
 # create a shell so we can configure clustering and stuff
-CMD /usr/sbin/rabbitmq-server && /bin/bash -l
+CMD /usr/sbin/rabbitmq-cluster && /bin/bash -l
