@@ -7,6 +7,7 @@ MAINTAINER Dave Goehrig dave@dloh.org
 
 # We need the developer tools to build the occasional add on or two
 RUN yum -y groupinstall "Development Tools"
+RUN yum -y install gawk
 
 # Install EPEL6 for additional packages
 RUN yum -y install http://mirror.pnl.gov/epel/6/i386/epel-release-6-8.noarch.rpm
@@ -27,7 +28,10 @@ RUN chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
 ADD ./rabbitmq-server /usr/lib/rabbitmq/bin/rabbitmq-server
 
 # Update rabbitmqctl
-ADD ./rabbitmqclt /usr/lib/rabbitmq/bin/rabbitmqctl
+ADD ./rabbitmqctl /usr/lib/rabbitmq/bin/rabbitmqctl
+
+# Fix permissions on scripts
+RUN chmod 755 /usr/lib/rabbitmq/bin/rabbitmqctl /usr/lib/rabbitmq/bin/rabbitmq-server
 
 # install a script to setup the cluster based on DNS
 ADD ./rabbitmq-cluster /usr/sbin/rabbitmq-cluster
