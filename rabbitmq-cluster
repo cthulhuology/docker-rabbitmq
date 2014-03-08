@@ -1,7 +1,10 @@
 #!/bin/bash
 
 CONFIG=$(dig @${DNSSERVER} TXT ${CONTAINER_SERVER} | grep "^${CONTAINER_SERVER}\." | awk '{ print $5}')
-CLUSTER=$(echo $CONFIG | gawk -F ";" 'match($0,/rabbitmq_cluster=(\S+)/,m) {print m[1]}' | sed 's%\\;%%g' | sed 's%"%%g')
+CLUSTER=$(echo $CONFIG | gawk -F ";" 'match($0,/rabbitmq_cluster=([^;]+)/,m) {print m[1]}' | sed 's%\\;%%g' | sed 's%"%%g')
+
+echo "Discovering configuration [$CONFIG]"
+echo "Found cluster [$CLUSTER]"
 
 echo "Starting RabbitMQ"
 /usr/lib/rabbitmq/bin/rabbitmq-server &
