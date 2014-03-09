@@ -1,0 +1,3 @@
+#/bin/bash
+uuidgen -r | sed 's%-%%g' > erlang.cookie
+
