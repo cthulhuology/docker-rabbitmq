@@ -21,3 +21,7 @@ else
 	rabbitmqctl start_app
 fi
 
+# Infinite sleep loop to keep docker backgrounding happy
+while true; do
+	sleep 1
+done
